@@ -1,3 +1,4 @@
+import ModeToggle from '@/components/ModeToggle';
 import { Button } from '@/components/ui/button';
 import {
   SignInButton,
@@ -9,7 +10,7 @@ import {
 
 export default function Home() {
   return (
-    <div className='m-4'>
+    <div className='m-4 flex items-center'>
       <SignedOut>
         <SignInButton mode='modal'>
           <Button>Sign in </Button>
@@ -22,6 +23,7 @@ export default function Home() {
       </SignedIn>
 
       <Button variant={"secondary"}>click me </Button>
+      <ModeToggle/>
     </div>
   );
 }
