@@ -24,7 +24,7 @@ model User {
   location String?
   website String?
   createdAt DateTime @default(now()) // member since 2020
-  updtedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 
 
   //Relations
@@ -46,18 +46,17 @@ model User {
 
 model Post {
   id  String  @id @default(cuid())
-  autherId String 
+  authorId String 
   content String?
   image String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   //Relations
-  auther User @relation(fields: [autherId], references: [id], onDelete: Cascade) // cascade delete means delete all posts if auther is deleted
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade) // cascade delete means delete all posts if auther is deleted
   comments Comment[]
   likes Like[]
   notifications Notification[]
-
 }
 
 model Comment {
@@ -66,11 +65,13 @@ model Comment {
   content String
   postId String
   createdAt DateTime @default(now())
-  updatedAT DateTime @updatedAt
+  updatedAt DateTime @updatedAt
+  notifications Notification[]
 
   //relations
   author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
 
   @@index([authorId,postId]) //composite index for faster queries
 }
@@ -79,7 +80,7 @@ model Like {
   id String @id @default(cuid())
   postId String
   userId String
-  createdAT DateTime @default(now())
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
 
@@ -96,12 +97,12 @@ model Follows {
 
   followerId String
   followingId String
-  createdAT DateTime @default(now())
+  createdAt DateTime @default(now())
 
 
-  //Rellations
+  //Relations
   follower User @relation("follower",fields: [followerId], references: [id], onDelete: Cascade)
-  folowing User @relation("following",fields: [followingId], references: [id], onDelete: Cascade)
+  following User @relation("following",fields: [followingId], references: [id], onDelete: Cascade)
 
   @@index([followerId,followingId])
   @@id([followerId,followingId]) //composite primary key prevents duplicate follows
@@ -123,6 +124,8 @@ model Notification{
   creator User @relation("notificationCreator",fields: [creatorId], references: [id], onDelete: Cascade)
   post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@index([userId,createdAt])
 }
 
 enum NotificationType {
