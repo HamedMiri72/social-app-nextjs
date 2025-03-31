@@ -28,11 +28,11 @@ async function AuthenticatedSidbar() {
         </div>
         <div className="flex items-center justify-between w-full border-b pb-3">
           <div className="flex flex-col items-center">
-            <span>{user.following}</span>
+            <span>{user._count.following}</span>
             <p className="text-gray-400 text-sm">Following</p>
           </div>
           <div className="flex flex-col items-center">
-            <span>{user.follower}</span>
+            <span>{user._count.followers}</span>
             <p className="text-gray-400 text-sm">Followers</p>
           </div>
         </div>
