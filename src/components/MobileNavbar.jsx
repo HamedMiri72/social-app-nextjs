@@ -17,7 +17,7 @@ import { useAuth, SignInButton, SignOutButton  } from "@clerk/nextjs";
 
 function MobileNavbar() {
   const { theme, setTheme } = useTheme();
-  const [showMobileMenu, setShowMobileMenu] = useState(true);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const {isSignedIn} = useAuth();
 
   return (
