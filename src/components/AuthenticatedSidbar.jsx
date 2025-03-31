@@ -19,7 +19,7 @@ async function AuthenticatedSidbar() {
     <div className="border p-4 rounded-lg">
       <div className="flex flex-col justify-between gap-3">
         <div className="w-full flex flex-col items-center justify-between gap-3 border-b pb-3">
-          <Image src="/user.png" width={80} height={80} alt="userProfile" />
+          <Image src={user.image} width={80} height={80} alt="userProfile" className="rounded-full object-cover"/>
           <p>{user.name}</p>
           <span className="text-sm text-gray-400">{user.username}</span>
           {user.bio && <span className="text-sm text-gray-400">
