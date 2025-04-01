@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/Prisma";
 import { auth, currentUser} from "@clerk/nextjs/server"
+import { revalidatePath } from "next/cache";
 
 export const syncUser = async() => {
 
@@ -113,5 +114,59 @@ export const getRandomUsers = async() => {
         console.log("Error fetching random users", error);
         return [];
 
+    }
+}
+
+export const toggleFollow = async(targetUserId) => {
+    const userId = await getDbUserId();
+
+    try{
+
+        if(userId === targetUserId) throw new Error("you can not follow yourself");
+
+        const exsistingFollow = await prisma.follows.findUnique({
+            where: {
+                followerId_followingId:{
+                    followerId: userId,
+                    followingId: targetUserId
+                }
+            }
+        })
+        if(exsistingFollow){
+            //unfollow
+            await prisma.follows.delete({
+                where:{
+                    followerId_followingId:{
+                        followerId:userId,
+                        followingId: targetUserId,
+                    }
+                }
+            })
+        }else{
+            //follow transaction all of them or non of them
+           await prisma.$transaction([
+            prisma.follows.create({
+                data:{
+                    followerId: userId,
+                    followingId:targetUserId,
+                }
+            }),
+
+            prisma.notification.create({
+                data: {
+                    type:"FOLLOW",
+                    userId: targetUserId, // user Being Followed
+                    creatorId: userId
+                }
+            })
+
+           ])
+        }
+        revalidatePath("/")
+        return {success: true}
+
+    }catch(error){
+        console.log("Somthing went wrong in follow action", error);
+        return {success: false, error: "error toggling follow"};
     }
 }
