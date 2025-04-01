@@ -2,6 +2,7 @@
 
 import CratePost from "@/components/CratePost";
 import { currentUser } from "@clerk/nextjs/server";
+import WhoToFollow from "@/components/WhoToFollow";
 
 export default async function Home() {
 
@@ -18,7 +19,7 @@ export default async function Home() {
       </div>
       <div className="hidden lg:block lg:col-span-4 sticky top-20">
 
-        who to follow
+        <WhoToFollow/>
 
       </div>
 
