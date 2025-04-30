@@ -4,6 +4,9 @@ import { prisma } from "@/lib/Prisma";
 import { auth, currentUser} from "@clerk/nextjs/server"
 import { revalidatePath } from "next/cache";
 
+
+
+
 export const syncUser = async() => {
 
     try{
@@ -36,7 +39,7 @@ export const syncUser = async() => {
 
         return userDb;
     }catch(error){
-
+        console.log("Error in sync user")
     }
 
 }
