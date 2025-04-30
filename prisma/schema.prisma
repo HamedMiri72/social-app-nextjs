@@ -13,6 +13,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+
+
 model User {
   id String @id @default(cuid())
   email String @unique
@@ -34,15 +37,14 @@ model User {
   
 
 
-  followers Follows[] @relation("following") //users who follow this user
-  following Follows[] @relation("follower") //users this user follows
+  followers Follows[] @relation("following") //users who follow this user // Give me all Follows where I am the following — i.e., other users follow me.
+  following Follows[] @relation("follower") //users this user follows //Give me all Follows where I am the follower — i.e., I follow other users
 
 
   notifications Notification[] @relation("userNotifications") //notifications received by a user 
   notificationCreated Notification[] @relation("notificationCreator") //notifications triggered by a user
 
 }
-
 
 model Post {
   id  String  @id @default(cuid())
@@ -58,6 +60,8 @@ model Post {
   likes Like[]
   notifications Notification[]
 }
+
+
 
 model Comment {
   id String @id @default(cuid())
@@ -76,6 +80,7 @@ model Comment {
   @@index([authorId,postId]) //composite index for faster queries
 }
 
+
 model Like {
   id String @id @default(cuid())
   postId String
@@ -93,6 +98,7 @@ model Like {
 
 }
 
+
 model Follows {
 
   followerId String
@@ -109,14 +115,17 @@ model Follows {
 
 }
 
+
+
+
 model Notification{
   id String @id @default(cuid())
-  userId String
-  creatorId String
+  userId String // recieve a notification
+  creatorId String // senfd notification
   type NotificationType
   read Boolean @default(false)
   postId String?
-  commentId String?
+  commentId String? //? means if its a comment notification so it have commentid
   createdAt DateTime @default(now())
 
   //Relations
